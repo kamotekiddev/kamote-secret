@@ -1,7 +1,7 @@
 import { Box } from "@/components/chakra-components";
 
 const Home = () => {
-  return <Box>page</Box>;
+  return <Box p={4}>Kamote Secret</Box>;
 };
 
 export default Home;
