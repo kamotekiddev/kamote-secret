@@ -8,7 +8,7 @@ interface Props {
 
 const MainLayout = ({ children }: Props) => {
   return (
-    <Grid templateRows="auto 1fr" minH="100vh">
+    <Grid templateRows="auto 1fr" h="100vh">
       <Navbar />
       {children}
     </Grid>

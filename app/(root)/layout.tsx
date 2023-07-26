@@ -9,7 +9,7 @@ interface Props {
 
 const Layout = ({ children }: Props) => {
   return (
-    <Grid templateColumns="auto 1fr">
+    <Grid templateColumns="auto 1fr" overflow="hidden">
       <Sidenav />
       {children}
     </Grid>
