@@ -1,18 +1,12 @@
 import { ReactNode } from "react";
 import { Grid } from "@/components/chakra-components";
-import Navbar from "./Navbar";
 
 interface Props {
   children: ReactNode;
 }
 
 const MainLayout = ({ children }: Props) => {
-  return (
-    <Grid templateRows="auto 1fr" h="100vh">
-      <Navbar />
-      {children}
-    </Grid>
-  );
+  return <Grid h="100vh">{children}</Grid>;
 };
 
 export default MainLayout;
