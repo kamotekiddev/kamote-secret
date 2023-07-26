@@ -4,6 +4,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 
 import ChakraProvider from "@/provider/ChakraProvider";
 import MainLayout from "@/components/layouts/MainLayout";
+import ModalProvider from "@/provider/ModalProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={inter.className}>
           <ChakraProvider>
+            <ModalProvider />
             <MainLayout>{children}</MainLayout>
           </ChakraProvider>
         </body>

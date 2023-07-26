@@ -1,16 +1,21 @@
+"use client";
+
 import { FiPlus } from "react-icons/fi";
 import { Button, Grid } from "@/components/chakra-components";
+import useCreateChannelModal from "@/hooks/useCreateChannelModal";
 
 const Sidenav = () => {
+  const { onOpen } = useCreateChannelModal();
+
   return (
     <Grid
-      templateRows="auto 1fr"
-      minW="250px"
       p={4}
+      minW="250px"
       borderRight="1px"
       borderColor="gray.200"
+      templateRows="auto 1fr"
     >
-      <Button colorScheme="green" leftIcon={<FiPlus />}>
+      <Button onClick={onOpen} colorScheme="green" leftIcon={<FiPlus />}>
         Create
       </Button>
     </Grid>
