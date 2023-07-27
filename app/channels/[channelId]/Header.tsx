@@ -1,18 +1,15 @@
 "use client";
 
-import { isAxiosError } from "axios";
-import { useParams, useRouter } from "next/navigation";
-import {
-  Button,
-  HStack,
-  Heading,
-  useToast,
-} from "@/components/chakra-components";
+import { Button, HStack, Heading } from "@/components/chakra-components";
 
-import useDeleteChannelMutation from "@/hooks/useDeleteChannelMutation";
+import { Channel } from "@prisma/client";
 import useDeleteChannelModal from "@/hooks/useDeleteChannelModal";
 
-const Header = () => {
+interface Props {
+  channel: Channel;
+}
+
+const Header = ({ channel }: Props) => {
   const { onOpen } = useDeleteChannelModal();
 
   return (
@@ -23,7 +20,7 @@ const Header = () => {
       justify="space-between"
       alignItems="center"
     >
-      <Heading size="md">Kamote Secret</Heading>
+      <Heading size="md">{channel?.name}</Heading>
       <Button colorScheme="red" onClick={onOpen}>
         Delete Channel
       </Button>

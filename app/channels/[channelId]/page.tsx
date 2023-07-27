@@ -1,7 +1,7 @@
-import React from "react";
+import { Box } from "@/components/chakra-components";
 
 const ChannelId = () => {
-  return <div>Kamote kid</div>;
+  return <Box p={4}>This is the Mobile Legends Vault</Box>;
 };
 
 export default ChannelId;
