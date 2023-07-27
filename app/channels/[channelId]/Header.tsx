@@ -1,35 +1,33 @@
 "use client";
+
 import { isAxiosError } from "axios";
-import { useParams } from "next/navigation";
-import { Button, useToast } from "@/components/chakra-components";
+import { useParams, useRouter } from "next/navigation";
+import {
+  Button,
+  HStack,
+  Heading,
+  useToast,
+} from "@/components/chakra-components";
 
 import useDeleteChannelMutation from "@/hooks/useDeleteChannelMutation";
+import useDeleteChannelModal from "@/hooks/useDeleteChannelModal";
 
 const Header = () => {
-  const toast = useToast();
-  const { mutateAsync: deleteChannel, isLoading } = useDeleteChannelMutation();
-  const { channelId } = useParams();
-
-  const handleDelete = async () => {
-    try {
-      const { data } = await deleteChannel(channelId as string);
-      toast({
-        title: "Success",
-        description: data.message,
-        status: "success",
-      });
-    } catch (error) {
-      if (isAxiosError<{ message: string }>(error))
-        toast({ title: "Error", description: error.response?.data.message });
-    }
-  };
+  const { onOpen } = useDeleteChannelModal();
 
   return (
-    <div>
-      <Button isLoading={isLoading} colorScheme="red" onClick={handleDelete}>
+    <HStack
+      p={4}
+      borderBottom="1px"
+      borderColor="gray.200"
+      justify="space-between"
+      alignItems="center"
+    >
+      <Heading size="md">Kamote Secret</Heading>
+      <Button colorScheme="red" onClick={onOpen}>
         Delete Channel
       </Button>
-    </div>
+    </HStack>
   );
 };
 
