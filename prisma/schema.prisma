@@ -11,7 +11,7 @@ datasource db {
   relationMode = "prisma"
 }
 
-model Channel {
+model Vault {
   id        String   @id @default(uuid())
   name      String
   userId    String
@@ -21,10 +21,10 @@ model Channel {
 }
 
 model Secret {
-  id        String  @id @default(uuid())
-  secret    Json
-  channelId String
-  channel   Channel @relation(fields: [channelId], references: [id])
+  id      String @id @default(uuid())
+  secret  Json
+  vaultId String
+  vaults  Vault  @relation(fields: [vaultId], references: [id])
 
-  @@index([channelId])
+  @@index([vaultId])
 }

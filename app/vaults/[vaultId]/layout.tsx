@@ -2,21 +2,21 @@ import { ReactNode } from "react";
 
 import { Center } from "@/components/chakra-components";
 import Header from "./Header";
-import getChannelById from "@/action/getChannelById";
+import getVaultById from "@/action/getVaultById";
 
 interface Props {
   children: ReactNode;
-  params: { channelId: string };
+  params: { vaultId: string };
 }
 
 const Layout = async ({ params, children }: Props) => {
-  const channel = await getChannelById(params.channelId);
+  const vault = await getVaultById(params.vaultId);
 
-  if (!channel) return <Center>Channel Not Found</Center>;
+  if (!vault) return <Center>Channel Not Found</Center>;
 
   return (
     <div>
-      <Header channel={channel} />
+      <Header vault={vault} />
       {children}
     </div>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import * as z from "zod";
+import { isAxiosError } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
@@ -18,9 +19,8 @@ import {
   ModalOverlay,
   useToast,
 } from "@/components/chakra-components";
-import useCreateChannelModal from "@/hooks/useCreateChannelModal";
-import useCreateChannelMutation from "@/hooks/useCreateChannelMutation";
-import { AxiosError, isAxiosError } from "axios";
+import useCreateVaultModal from "@/hooks/useCreateVaultModal";
+import useCreateVault from "@/hooks/useCreateVault";
 
 const formSchema = z.object({
   name: z.string().nonempty(),
@@ -28,10 +28,10 @@ const formSchema = z.object({
 
 const defaultValues: z.infer<typeof formSchema> = { name: "" };
 
-const CreateChannelModal = () => {
+const CreateVaultModal = () => {
   const toast = useToast();
-  const { isOpen, onClose } = useCreateChannelModal();
-  const { mutateAsync: createChannel, isLoading } = useCreateChannelMutation();
+  const { isOpen, onClose } = useCreateVaultModal();
+  const { mutateAsync: createChannel, isLoading } = useCreateVault();
 
   const {
     handleSubmit,
@@ -67,10 +67,10 @@ const CreateChannelModal = () => {
     <Modal isOpen={isOpen} onClose={handleClose} isCentered>
       <ModalOverlay />
       <ModalContent as="form" onSubmit={handleSubmit(onSubmit)}>
-        <ModalHeader>New Secret Channel</ModalHeader>
+        <ModalHeader>New Secret Vault</ModalHeader>
         <ModalBody>
           <FormControl>
-            <FormLabel>Channel Name</FormLabel>
+            <FormLabel>Name</FormLabel>
             <Input {...register("name")} />
             <FormHelperText color="red.500">
               {errors.name?.message}
@@ -86,7 +86,7 @@ const CreateChannelModal = () => {
               isLoading={isLoading}
               variant="solid"
               type="submit"
-              colorScheme="green"
+              colorScheme="teal"
             >
               Create
             </Button>
@@ -97,4 +97,4 @@ const CreateChannelModal = () => {
   );
 };
 
-export default CreateChannelModal;
+export default CreateVaultModal;

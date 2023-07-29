@@ -8,10 +8,10 @@ interface Modal {
   onOpen: () => void;
 }
 
-const useCreateChannelModal = create<Modal>()((set) => ({
+const useCreateVaultModal = create<Modal>()((set) => ({
   isOpen: false,
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false }),
 }));
 
-export default useCreateChannelModal;
+export default useCreateVaultModal;

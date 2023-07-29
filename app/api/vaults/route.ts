@@ -15,21 +15,21 @@ export async function POST(req: Request) {
     if (!name)
       return NextResponse.json({ message: "Invalid Data" }, { status: 400 });
 
-    const isExist = await prismadb.channel.findFirst({
+    const isExist = await prismadb.vault.findFirst({
       where: { name, userId },
     });
 
     if (isExist)
       return NextResponse.json(
-        { message: "Channel already exist" },
+        { message: "Vault already exist" },
         { status: 400 }
       );
 
-    const newSecretChannel = await prismadb.channel.create({
+    const newVault = await prismadb.vault.create({
       data: { userId, name },
     });
 
-    if (!newSecretChannel)
+    if (!newVault)
       return NextResponse.json(
         {
           message: "Something went wrong, Please try again later.",
@@ -38,8 +38,8 @@ export async function POST(req: Request) {
       );
 
     return NextResponse.json({
-      message: "Channel created successfully.",
-      channel: newSecretChannel,
+      message: "Vault created successfully.",
+      vault: newVault,
     });
   } catch (error) {
     return NextResponse.json(error, { status: 500 });
@@ -52,7 +52,7 @@ export async function GET() {
     if (!userId)
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
-    const channels = await prismadb.channel.findMany({
+    const channels = await prismadb.vault.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
     });

@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   redirects: async () => [
-    { source: "/", destination: "/channels", permanent: false },
+    { source: "/", destination: "/vaults", permanent: false },
   ],
 };
 

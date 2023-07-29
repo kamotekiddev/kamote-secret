@@ -14,29 +14,29 @@ import {
   useToast,
 } from "@/components/chakra-components";
 
-import useDeleteChannelModal from "@/hooks/useDeleteChannelModal";
-import useDeleteChannelMutation from "@/hooks/useDeleteChannelMutation";
+import useDeleteChannelModal from "@/hooks/useDeleteVaultModal";
+import useDeleteVault from "@/hooks/useDeleteVault";
 
-const DeleteChannelModal = () => {
+const DeleteVaultModal = () => {
   const toast = useToast();
   const router = useRouter();
-  const { channelId } = useParams();
+  const { vaultId } = useParams();
 
   const deleteChanelModal = useDeleteChannelModal();
-  const { mutateAsync: deleteChannel, isLoading } = useDeleteChannelMutation();
+  const { mutateAsync: deleteChannel, isLoading } = useDeleteVault();
 
   const handleClose = () => !isLoading && deleteChanelModal.onClose();
 
   const handleDelete = async () => {
     try {
-      const { data } = await deleteChannel(channelId as string);
+      const { data } = await deleteChannel(vaultId as string);
       toast({
         title: "Success",
         description: data.message,
         status: "success",
       });
       handleClose();
-      router.replace("/channels");
+      router.replace("/vaults");
     } catch (error) {
       if (isAxiosError<{ message: string }>(error))
         toast({ title: "Error", description: error.response?.data.message });
@@ -47,8 +47,8 @@ const DeleteChannelModal = () => {
     <Modal {...deleteChanelModal} isCentered>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Delete Channel</ModalHeader>
-        <ModalBody>Are you sure, you want to delete this channel?</ModalBody>
+        <ModalHeader>Delete Vault</ModalHeader>
+        <ModalBody>Are you sure, you want to delete this vault?</ModalBody>
         <ModalFooter>
           <HStack>
             <Button onClick={deleteChanelModal.onClose}>Close</Button>
@@ -66,4 +66,4 @@ const DeleteChannelModal = () => {
   );
 };
 
-export default DeleteChannelModal;
+export default DeleteVaultModal;
