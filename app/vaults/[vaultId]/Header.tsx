@@ -1,5 +1,6 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import { FiEdit, FiSettings, FiTrash } from "react-icons/fi";
 import {
   Button,
@@ -11,17 +12,15 @@ import {
   MenuList,
 } from "@/components/chakra-components";
 
-import { Vault } from "@prisma/client";
 import useDeleteVaultModal from "@/hooks/useDeleteVaultModal";
 import useRenameVaultModal from "@/hooks/useRenameVaultModal";
+import useFetchVaultById from "@/hooks/useFetchVaultById";
 
-interface Props {
-  vault: Vault;
-}
-
-const Header = ({ vault }: Props) => {
+const Header = () => {
   const deleteVaultModal = useDeleteVaultModal();
   const renameVaultModal = useRenameVaultModal();
+  const { vaultId } = useParams();
+  const { data: vault } = useFetchVaultById(vaultId as string);
 
   return (
     <HStack

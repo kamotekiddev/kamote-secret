@@ -1,6 +1,7 @@
 "use client";
 
 import * as z from "zod";
+import { useParams } from "next/navigation";
 import { isAxiosError } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -21,7 +22,6 @@ import {
 } from "@/components/chakra-components";
 import useRenameVaultModal from "@/hooks/useRenameVaultModal";
 import useRenameVault from "@/hooks/useRenameVault";
-import { useParams } from "next/navigation";
 
 const formSchema = z.object({
   name: z.string().nonempty(),

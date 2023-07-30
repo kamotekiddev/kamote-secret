@@ -10,7 +10,12 @@ const useRenameVault = <T>() => {
   const queryClient = useQueryClient();
   return useMutation<SuccessResponse, AxiosError, { id: string; data: T }>(
     ({ id, data }) => axios.put(`/api/vaults/${id}`, data),
-    { onSuccess: () => queryClient.invalidateQueries("vaults") }
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("vaults");
+        queryClient.invalidateQueries("vault");
+      },
+    }
   );
 };
 
