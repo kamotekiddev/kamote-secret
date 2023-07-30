@@ -3,6 +3,7 @@
 import { useParams } from "next/navigation";
 import { FiEdit, FiSettings, FiTrash } from "react-icons/fi";
 import {
+  Box,
   Button,
   HStack,
   Heading,
@@ -10,6 +11,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Text,
 } from "@/components/chakra-components";
 
 import useDeleteVaultModal from "@/hooks/useDeleteVaultModal";
@@ -30,7 +32,10 @@ const Header = () => {
       justify="space-between"
       alignItems="center"
     >
-      <Heading size="md">{vault?.name}</Heading>
+      <Box>
+        <Heading size="md">{vault?.name}</Heading>
+        <Text fontSize="sm">Stored Secrets ({vault?.secrets.length})</Text>
+      </Box>
       <Menu>
         <MenuButton as={Button} leftIcon={<FiSettings />} colorScheme="teal">
           Settings

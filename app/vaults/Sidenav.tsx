@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { UserButton } from "@clerk/nextjs";
-import { FiHash, FiPlus } from "react-icons/fi";
+import { FiPlus } from "react-icons/fi";
 import {
   Box,
   Button,
@@ -15,6 +15,7 @@ import {
 } from "@/components/chakra-components";
 import useCreateVaultModal from "@/hooks/useCreateVaultModal";
 import useFetchVaults from "@/hooks/useFetchVaults";
+import { RiGitRepositoryPrivateFill } from "react-icons/ri";
 
 const Sidenav = () => {
   const { onOpen } = useCreateVaultModal();
@@ -52,7 +53,7 @@ const Sidenav = () => {
             <Button
               as={Link}
               href={`/vaults/${vault.id}`}
-              rightIcon={<FiHash />}
+              rightIcon={<RiGitRepositoryPrivateFill />}
               key={vault.id}
               variant={vaultId === vault.id ? "solid" : "ghost"}
             >
