@@ -12,14 +12,16 @@ import {
 } from "@/components/chakra-components";
 
 import { Vault } from "@prisma/client";
-import useDeleteChannelModal from "@/hooks/useDeleteVaultModal";
+import useDeleteVaultModal from "@/hooks/useDeleteVaultModal";
+import useRenameVaultModal from "@/hooks/useRenameVaultModal";
 
 interface Props {
   vault: Vault;
 }
 
 const Header = ({ vault }: Props) => {
-  const { onOpen } = useDeleteChannelModal();
+  const deleteVaultModal = useDeleteVaultModal();
+  const renameVaultModal = useRenameVaultModal();
 
   return (
     <HStack
@@ -35,10 +37,10 @@ const Header = ({ vault }: Props) => {
           Settings
         </MenuButton>
         <MenuList>
-          <MenuItem icon={<FiTrash />} onClick={onOpen}>
+          <MenuItem icon={<FiTrash />} onClick={deleteVaultModal.onOpen}>
             Delete Vault
           </MenuItem>
-          <MenuItem icon={<FiEdit />} onClick={onOpen}>
+          <MenuItem icon={<FiEdit />} onClick={renameVaultModal.onOpen}>
             Rename Vault
           </MenuItem>
         </MenuList>

@@ -14,7 +14,7 @@ import {
   useToast,
 } from "@/components/chakra-components";
 
-import useDeleteChannelModal from "@/hooks/useDeleteVaultModal";
+import useDeleteVaultModal from "@/hooks/useDeleteVaultModal";
 import useDeleteVault from "@/hooks/useDeleteVault";
 
 const DeleteVaultModal = () => {
@@ -22,7 +22,7 @@ const DeleteVaultModal = () => {
   const router = useRouter();
   const { vaultId } = useParams();
 
-  const deleteChanelModal = useDeleteChannelModal();
+  const deleteChanelModal = useDeleteVaultModal();
   const { mutateAsync: deleteChannel, isLoading } = useDeleteVault();
 
   const handleClose = () => !isLoading && deleteChanelModal.onClose();
