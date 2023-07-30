@@ -93,7 +93,7 @@ const RenameVaultModal = () => {
               type="submit"
               colorScheme="teal"
             >
-              Create
+              Rename
             </Button>
           </HStack>
         </ModalFooter>

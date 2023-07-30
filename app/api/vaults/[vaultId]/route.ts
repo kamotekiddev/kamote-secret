@@ -7,6 +7,27 @@ interface Params {
   params: { vaultId: string };
 }
 
+export async function GET(req: Request, { params }: Params) {
+  try {
+    const { userId } = auth();
+    const id = params.vaultId;
+
+    if (!userId)
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    if (!id)
+      return NextResponse.json({ message: "Invalid Data" }, { status: 400 });
+
+    const vault = await prismadb.vault.findUnique({
+      where: { id },
+      include: { secrets: true },
+    });
+
+    return NextResponse.json(vault);
+  } catch (error) {
+    return NextResponse.json(error, { status: 500 });
+  }
+}
+
 export async function DELETE(req: Request, { params }: Params) {
   try {
     const { userId } = auth();
