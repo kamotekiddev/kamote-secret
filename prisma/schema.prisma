@@ -22,7 +22,8 @@ model Vault {
 
 model Secret {
   id      String @id @default(uuid())
-  secret  Json
+  label   String
+  secret  String
   vaultId String
   vaults  Vault  @relation(fields: [vaultId], references: [id])
 
