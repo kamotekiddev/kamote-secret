@@ -5,12 +5,11 @@ import { Grid } from "@/components/chakra-components";
 
 interface Props {
   children: ReactNode;
-  params: { vaultId: string };
 }
 
-const Layout = async ({ params, children }: Props) => {
+const Layout = async ({ children }: Props) => {
   return (
-    <Grid templateRows="auto 1fr">
+    <Grid templateRows="auto 1fr" overflow="hidden">
       <Header />
       {children}
     </Grid>
