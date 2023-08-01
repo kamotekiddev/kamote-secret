@@ -1,17 +1,17 @@
 "use client";
 
+import Link from "next/link";
 import { useParams } from "next/navigation";
-import { FiEdit, FiSettings, FiTrash } from "react-icons/fi";
+import { FiEdit, FiPlus, FiSettings, FiTrash } from "react-icons/fi";
 import {
-  Box,
   Button,
   HStack,
   Heading,
+  IconButton,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
-  Text,
 } from "@/components/chakra-components";
 
 import useDeleteVaultModal from "@/hooks/useDeleteVaultModal";
@@ -19,9 +19,10 @@ import useRenameVaultModal from "@/hooks/useRenameVaultModal";
 import useFetchVaultById from "@/hooks/useFetchVaultById";
 
 const Header = () => {
+  const { vaultId } = useParams();
   const deleteVaultModal = useDeleteVaultModal();
   const renameVaultModal = useRenameVaultModal();
-  const { vaultId } = useParams();
+
   const { data: vault } = useFetchVaultById(vaultId as string);
 
   return (
@@ -32,14 +33,27 @@ const Header = () => {
       justify="space-between"
       alignItems="center"
     >
-      <Box>
-        <Heading size="md">{vault?.name}</Heading>
-        <Text fontSize="sm">Stored Secrets ({vault?.secrets.length})</Text>
-      </Box>
+      <HStack columnGap={6} align="center">
+        <Heading size="md" mb={0}>
+          {vault?.name} ({vault?.secrets.length || 0})
+        </Heading>
+        <Button
+          as={Link}
+          size="sm"
+          href={`/vaults/${vault?.id}/create-secret`}
+          colorScheme="teal"
+          rightIcon={<FiPlus />}
+        >
+          Create
+        </Button>
+      </HStack>
       <Menu>
-        <MenuButton as={Button} leftIcon={<FiSettings />} colorScheme="teal">
-          Settings
-        </MenuButton>
+        <MenuButton
+          as={IconButton}
+          icon={<FiSettings />}
+          colorScheme="teal"
+          rounded="full"
+        />
         <MenuList>
           <MenuItem icon={<FiTrash />} onClick={deleteVaultModal.onOpen}>
             Delete Vault
