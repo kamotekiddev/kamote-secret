@@ -1,6 +1,8 @@
 "use client";
 
 import * as z from "zod";
+import { useParams, useRouter } from "next/navigation";
+import { isAxiosError } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import { RiGitRepositoryPrivateFill } from "react-icons/ri";
@@ -10,7 +12,6 @@ import {
   Button,
   Card,
   CardBody,
-  CloseButton,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -21,8 +22,9 @@ import {
   Input,
   Stack,
   Text,
-  Textarea,
+  useToast,
 } from "@/components/chakra-components";
+import useCreateSecret from "@/hooks/useCreateSecret";
 
 const formSchema = z.object({
   label: z.string().nonempty(),
@@ -37,23 +39,44 @@ const defaultValues: z.infer<typeof formSchema> = {
 };
 
 const CreateSecretForm = () => {
+  const toast = useToast();
+  const { vaultId } = useParams();
+  const router = useRouter();
+  const { mutateAsync: createSecret, isLoading } = useCreateSecret();
+
   const {
     register,
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<z.infer<typeof formSchema>>({
     defaultValues,
     resolver: zodResolver(formSchema),
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append } = useFieldArray({
     control,
     name: "secrets",
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const { data } = await createSecret({
+        vaultId: vaultId as string,
+        data: { label: values.label, secret: values.secrets },
+      });
+      reset(defaultValues);
+      router.replace(`/vaults/${vaultId}`);
+      toast({ title: "Success", description: data.message, status: "success" });
+    } catch (error) {
+      if (isAxiosError<{ message: string }>(error))
+        toast({
+          title: "Error",
+          description: error.response?.data?.message,
+          status: "error",
+        });
+    }
   };
 
   return (
@@ -116,7 +139,7 @@ const CreateSecretForm = () => {
         ))}
         <HStack justify="flex-end">
           <Button>Cancel</Button>
-          <Button type="submit" colorScheme="teal">
+          <Button isLoading={isLoading} type="submit" colorScheme="teal">
             Save Secret
           </Button>
         </HStack>

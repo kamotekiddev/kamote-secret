@@ -18,8 +18,18 @@ export async function POST(req: Request, { params }: { params: Params }) {
     if (!label || !secret)
       return NextResponse.json({ message: "Invalid Data" }, { status: 400 });
 
+    const isExist = await prismadb.secret.findFirst({
+      where: { vaultId: params.vaultId, label },
+    });
+
+    if (isExist)
+      return NextResponse.json(
+        { message: "Label Already exist" },
+        { status: 400 }
+      );
+
     const encryptedSecret = CryptoJS.AES.encrypt(
-      secret,
+      JSON.stringify(secret),
       process.env.ENCRYPTION_SECRET!
     ).toString();
 

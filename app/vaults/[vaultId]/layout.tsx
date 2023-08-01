@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-import Header from "./Header";
+import Header from "./components/Header";
 import { Grid } from "@/components/chakra-components";
 
 interface Props {

@@ -1,10 +1,10 @@
 import { Box } from "@/components/chakra-components";
-import EmptyVault from "./EmptyVault";
+import Secrets from "./components/Secrets";
 
 const VaultId = () => {
   return (
     <Box p={4}>
-      <EmptyVault />
+      <Secrets />
     </Box>
   );
 };
