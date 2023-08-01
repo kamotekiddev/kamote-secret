@@ -15,10 +15,7 @@ const useCreateVault = <T>() => {
   return useMutation<SuccessResponse, AxiosError, T>(
     (data) => axios.post("/api/vaults", data),
     {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["vaults"] });
-        queryClient.invalidateQueries({ queryKey: ["vault"] });
-      },
+      onSuccess: () => queryClient.invalidateQueries({ queryKey: ["vaults"] }),
     }
   );
 };
