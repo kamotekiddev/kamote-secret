@@ -7,6 +7,33 @@ interface Params {
   vaultId: string;
 }
 
+export async function GET(req: Request, { params }: { params: Params }) {
+  try {
+    const { userId } = auth();
+
+    if (!userId)
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+
+    const vault = await prismadb.vault.findUnique({
+      where: { userId, id: params.vaultId },
+    });
+
+    if (!vault)
+      return NextResponse.json({ message: "Vault not found" }, { status: 404 });
+
+    const secrets = await prismadb.secret.findMany({
+      where: { vaultId: vault?.id },
+    });
+
+    return NextResponse.json(secrets);
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Internal Server Error", error },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(req: Request, { params }: { params: Params }) {
   try {
     const body = await req.json();
