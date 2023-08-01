@@ -7,6 +7,8 @@ interface Params {
   vaultId: string;
 }
 
+const SECRET_LIMIT = 20;
+
 export async function GET(req: Request, { params }: { params: Params }) {
   try {
     const { userId } = auth();
@@ -23,6 +25,7 @@ export async function GET(req: Request, { params }: { params: Params }) {
 
     const secrets = await prismadb.secret.findMany({
       where: { vaultId: vault?.id },
+      orderBy: { createdAt: "desc" },
     });
 
     return NextResponse.json(secrets);
@@ -52,6 +55,16 @@ export async function POST(req: Request, { params }: { params: Params }) {
     if (isExist)
       return NextResponse.json(
         { message: "Label Already exist" },
+        { status: 400 }
+      );
+
+    const secrets = await prismadb.secret.findMany({
+      where: { vaultId: params.vaultId },
+    });
+
+    if (secrets.length >= SECRET_LIMIT)
+      return NextResponse.json(
+        { message: "Your vault reached the maximum limit of secrets allowed" },
         { status: 400 }
       );
 

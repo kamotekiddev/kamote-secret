@@ -21,11 +21,13 @@ model Vault {
 }
 
 model Secret {
-  id      String @id @default(uuid())
-  label   String
-  secret  String
-  vaultId String
-  vaults  Vault  @relation(fields: [vaultId], references: [id])
+  id        String   @id @default(uuid())
+  label     String
+  secret    String
+  vaultId   String
+  createdAt DateTime @default(now())
+  updated   DateTime @updatedAt
+  vaults    Vault    @relation(fields: [vaultId], references: [id])
 
   @@index([vaultId])
 }
