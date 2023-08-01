@@ -12,8 +12,8 @@ const useRenameVault = <T>() => {
     ({ id, data }) => axios.put(`/api/vaults/${id}`, data),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries("vaults");
-        queryClient.invalidateQueries("vault");
+        queryClient.invalidateQueries({ queryKey: ["vaults"] });
+        queryClient.invalidateQueries({ queryKey: ["vault"] });
       },
     }
   );
