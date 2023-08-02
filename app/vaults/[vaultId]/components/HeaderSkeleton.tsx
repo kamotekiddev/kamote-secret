@@ -1,4 +1,8 @@
-import { HStack, Skeleton } from "@/components/chakra-components";
+import {
+  HStack,
+  Skeleton,
+  SkeletonCircle,
+} from "@/components/chakra-components";
 
 const HeaderSkeleton = () => {
   return (
@@ -13,7 +17,7 @@ const HeaderSkeleton = () => {
         <Skeleton height="30px" width="200px" rounded="lg" />
         <Skeleton height="40px" width="80px" rounded="lg" />
       </HStack>
-      <Skeleton height="40px" width="40px" rounded="full" />
+      <SkeletonCircle size="10" />
     </HStack>
   );
 };
