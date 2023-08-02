@@ -17,13 +17,16 @@ import {
 import useDeleteVaultModal from "@/hooks/useDeleteVaultModal";
 import useRenameVaultModal from "@/hooks/useRenameVaultModal";
 import useFetchVaultById from "@/hooks/useFetchVaultById";
+import HeaderSkeleton from "./HeaderSkeleton";
 
 const Header = () => {
   const { vaultId } = useParams();
   const deleteVaultModal = useDeleteVaultModal();
   const renameVaultModal = useRenameVaultModal();
 
-  const { data: vault } = useFetchVaultById(vaultId as string);
+  const { data: vault, isLoading } = useFetchVaultById(vaultId as string);
+
+  if (isLoading) return <HeaderSkeleton />;
 
   return (
     <HStack
