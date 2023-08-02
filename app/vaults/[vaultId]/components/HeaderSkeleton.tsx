@@ -8,6 +8,7 @@ const HeaderSkeleton = () => {
   return (
     <HStack
       p={4}
+      h={70}
       borderBottom="1px"
       borderColor="gray.200"
       justify="space-between"

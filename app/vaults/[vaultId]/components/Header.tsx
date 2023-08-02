@@ -34,6 +34,7 @@ const Header = () => {
   return (
     <HStack
       p={4}
+      h="70px"
       borderBottom="1px"
       borderColor="gray.200"
       justify="space-between"

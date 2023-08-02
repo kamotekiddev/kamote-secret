@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Grid } from "@/components/chakra-components";
 
-import Sidenav from "./Sidenav";
+import Sidenav from "./components/Sidenav";
 
 interface Props {
   children: ReactNode;
