@@ -30,40 +30,46 @@ const Sidenav = () => {
       templateRows="auto auto 1fr"
       overflow="hidden"
     >
-      <Stack spacing={6} p={4} pb={8} borderBottom="1px" borderColor="gray.200">
-        <HStack h={42} align="center" justify="space-between">
-          <Heading size="sm">Your Vaults</Heading>
-          <UserButton afterSignOutUrl="/" />
-        </HStack>
-        <Button onClick={onOpen} colorScheme="teal" rightIcon={<FiPlus />}>
-          Create
-        </Button>
-      </Stack>
-      <Box
-        overflow="auto"
+      <HStack
         p={4}
-        css={{
-          "&::-webkit-scrollbar": {
-            width: "0px",
-          },
-        }}
+        py={5}
+        borderBottom="1px"
+        borderColor="gray.200"
+        align="center"
+        justify="space-between"
       >
-        <Stack spacing={0}>
-          {vaults?.map((vault) => (
-            <Button
-              as={Link}
-              href={`/vaults/${vault.id}`}
-              rightIcon={<RiGitRepositoryPrivateFill />}
-              key={vault.id}
-              variant={vaultId === vault.id ? "solid" : "ghost"}
-            >
-              <Text flex={1} fontSize="sm" textAlign="left" isTruncated>
-                {vault.name}
-              </Text>
-            </Button>
-          ))}
-        </Stack>
-      </Box>
+        <Heading size="sm">Your Vaults</Heading>
+        <UserButton afterSignOutUrl="/" />
+      </HStack>
+      <Grid p={4} rowGap={4} overflow="hidden" templateRows="auto 1fr">
+        <Button onClick={onOpen} colorScheme="teal" rightIcon={<FiPlus />}>
+          New Vault
+        </Button>
+        <Box
+          overflow="auto"
+          css={{
+            "&::-webkit-scrollbar": {
+              width: "0px",
+            },
+          }}
+        >
+          <Stack spacing={0}>
+            {vaults?.map((vault) => (
+              <Button
+                as={Link}
+                href={`/vaults/${vault.id}`}
+                rightIcon={<RiGitRepositoryPrivateFill />}
+                key={vault.id}
+                variant={vaultId === vault.id ? "solid" : "ghost"}
+              >
+                <Text flex={1} fontSize="sm" textAlign="left" isTruncated>
+                  {vault.name}
+                </Text>
+              </Button>
+            ))}
+          </Stack>
+        </Box>
+      </Grid>
     </Grid>
   );
 };
