@@ -24,7 +24,7 @@ import {
   Text,
   useToast,
 } from "@/components/chakra-components";
-import useCreateSecret from "@/hooks/useCreateSecret";
+import useCreateSecret from "@/hooks/secrets/api/useCreateSecret";
 
 const formSchema = z.object({
   label: z.string().nonempty(),
