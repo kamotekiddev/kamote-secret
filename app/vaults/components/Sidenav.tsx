@@ -1,9 +1,7 @@
 "use client";
 
-import Link from "next/link";
-import { RiGitRepositoryPrivateFill } from "react-icons/ri";
-import { useParams } from "next/navigation";
 import { UserButton } from "@clerk/nextjs";
+import { useParams } from "next/navigation";
 import { FiPlus } from "react-icons/fi";
 import {
   Box,
@@ -12,15 +10,16 @@ import {
   HStack,
   Heading,
   Stack,
-  Text,
 } from "@/components/chakra-components";
 import useCreateVaultModal from "@/hooks/useCreateVaultModal";
 import useFetchVaults from "@/hooks/useFetchVaults";
+import VaultList from "./VaultList";
+import VaultSkeleton from "./VaultSkeleton";
 
 const Sidenav = () => {
-  const { onOpen } = useCreateVaultModal();
-  const { data: vaults } = useFetchVaults();
   const { vaultId } = useParams();
+  const { onOpen } = useCreateVaultModal();
+  const { data: vaults, isLoading } = useFetchVaults();
 
   return (
     <Grid
@@ -33,6 +32,7 @@ const Sidenav = () => {
       <HStack
         p={4}
         py={5}
+        h={70}
         borderBottom="1px"
         borderColor="gray.200"
         align="center"
@@ -53,21 +53,15 @@ const Sidenav = () => {
             },
           }}
         >
-          <Stack spacing={0}>
-            {vaults?.map((vault) => (
-              <Button
-                as={Link}
-                href={`/vaults/${vault.id}`}
-                rightIcon={<RiGitRepositoryPrivateFill />}
-                key={vault.id}
-                variant={vaultId === vault.id ? "solid" : "ghost"}
-              >
-                <Text flex={1} fontSize="sm" textAlign="left" isTruncated>
-                  {vault.name}
-                </Text>
-              </Button>
-            ))}
-          </Stack>
+          {isLoading ? (
+            <Stack>
+              {[...Array(40).keys()].map((i) => (
+                <VaultSkeleton key={i} />
+              ))}
+            </Stack>
+          ) : (
+            <VaultList vaults={vaults} activeId={vaultId as string} />
+          )}
         </Box>
       </Grid>
     </Grid>
