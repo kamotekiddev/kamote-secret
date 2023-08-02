@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { RiGitRepositoryPrivateFill } from "react-icons/ri";
 import { useParams } from "next/navigation";
 import { UserButton } from "@clerk/nextjs";
 import { FiPlus } from "react-icons/fi";
@@ -15,7 +16,6 @@ import {
 } from "@/components/chakra-components";
 import useCreateVaultModal from "@/hooks/useCreateVaultModal";
 import useFetchVaults from "@/hooks/useFetchVaults";
-import { RiGitRepositoryPrivateFill } from "react-icons/ri";
 
 const Sidenav = () => {
   const { onOpen } = useCreateVaultModal();

@@ -26,6 +26,9 @@ const Header = () => {
 
   const { data: vault, isLoading } = useFetchVaultById(vaultId as string);
 
+  const SECRET_COUNT = vault?.secrets.length || 0;
+  const TITLE = `${vault?.name} ${SECRET_COUNT > 0 ? `(${SECRET_COUNT})` : ""}`;
+
   if (isLoading) return <HeaderSkeleton />;
 
   return (
@@ -38,17 +41,19 @@ const Header = () => {
     >
       <HStack columnGap={6} align="center">
         <Heading size="md" mb={0}>
-          {vault?.name} ({vault?.secrets.length || 0})
+          {TITLE}
         </Heading>
-        <Button
-          as={Link}
-          size="sm"
-          href={`/vaults/${vault?.id}/create-secret`}
-          colorScheme="teal"
-          rightIcon={<FiPlus />}
-        >
-          Create
-        </Button>
+        {SECRET_COUNT > 0 && (
+          <Button
+            as={Link}
+            size="sm"
+            href={`/vaults/${vault?.id}/create-secret`}
+            colorScheme="teal"
+            rightIcon={<FiPlus />}
+          >
+            Create
+          </Button>
+        )}
       </HStack>
       <Menu>
         <MenuButton
