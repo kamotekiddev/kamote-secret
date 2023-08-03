@@ -21,9 +21,11 @@ const SecretBox = ({ secret, onDelete }: Props) => {
   return (
     <Card>
       <CardHeader>
-        <HStack columnGap={4} align="center">
-          <Heading size="sm">{secret.label}</Heading>
-          <Icon as={RiGitRepositoryPrivateFill} />
+        <HStack justify="space-between" align="center">
+          <HStack columnGap={4} align="center">
+            <Heading size="sm">{secret.label}</Heading>
+            <Icon as={RiGitRepositoryPrivateFill} />
+          </HStack>
           <CloseButton onClick={() => onDelete(secret)} />
         </HStack>
       </CardHeader>
