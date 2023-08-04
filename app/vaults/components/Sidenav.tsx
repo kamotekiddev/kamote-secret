@@ -1,9 +1,10 @@
 "use client";
 
-import { UserButton } from "@clerk/nextjs";
+import { useSession, signOut } from "next-auth/react";
 import { useParams } from "next/navigation";
 import { FiPlus } from "react-icons/fi";
 import {
+  Avatar,
   Box,
   Button,
   Grid,
@@ -11,6 +12,7 @@ import {
   Heading,
   Stack,
 } from "@/components/chakra-components";
+
 import useCreateVaultModal from "@/hooks/useCreateVaultModal";
 import useFetchVaults from "@/hooks/useFetchVaults";
 import VaultList from "./VaultList";
@@ -20,6 +22,7 @@ const Sidenav = () => {
   const { vaultId } = useParams();
   const { onOpen } = useCreateVaultModal();
   const { data: vaults, isLoading } = useFetchVaults();
+  const { data } = useSession();
 
   return (
     <Grid
@@ -39,7 +42,12 @@ const Sidenav = () => {
         justify="space-between"
       >
         <Heading size="sm">Your Vaults</Heading>
-        <UserButton afterSignOutUrl="/" />
+        <Avatar
+          onClick={() => signOut()}
+          size="sm"
+          src={data?.user?.image!}
+          name={data?.user?.name!}
+        />
       </HStack>
       <Grid p={4} rowGap={4} overflow="hidden" templateRows="auto 1fr">
         <Button onClick={onOpen} colorScheme="teal" rightIcon={<FiPlus />}>

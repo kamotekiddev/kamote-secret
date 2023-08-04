@@ -1,5 +1,5 @@
+import getCurrentUser from "@/libs/getCurrentUser";
 import prismadb from "@/libs/prismadb";
-import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 interface Params {
@@ -9,9 +9,9 @@ interface Params {
 
 export async function DELETE(req: Request, { params }: { params: Params }) {
   try {
-    const { userId } = auth();
+    const user = await getCurrentUser();
 
-    if (!userId)
+    if (!user?.id)
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
     const deletedSecret = await prismadb.secret.delete({

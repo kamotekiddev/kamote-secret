@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs";
 
 import prismadb from "@/libs/prismadb";
+import getCurrentUser from "@/libs/getCurrentUser";
 
 interface Params {
   params: { vaultId: string };
@@ -9,10 +9,10 @@ interface Params {
 
 export async function GET(req: Request, { params }: Params) {
   try {
-    const { userId } = auth();
+    const user = await getCurrentUser();
     const id = params.vaultId;
 
-    if (!userId)
+    if (!user?.id)
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     if (!id)
       return NextResponse.json({ message: "Invalid Data" }, { status: 400 });
@@ -30,10 +30,10 @@ export async function GET(req: Request, { params }: Params) {
 
 export async function DELETE(req: Request, { params }: Params) {
   try {
-    const { userId } = auth();
+    const user = await getCurrentUser();
     const id = params.vaultId;
 
-    if (!userId)
+    if (!user?.id)
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     if (!id)
       return NextResponse.json({ message: "Invalid Data" }, { status: 400 });
@@ -51,12 +51,12 @@ export async function DELETE(req: Request, { params }: Params) {
 
 export async function PUT(req: Request, { params }: Params) {
   try {
-    const { userId } = auth();
+    const user = await getCurrentUser();
     const body = await req.json();
     const id = params.vaultId;
     const { name } = body;
 
-    if (!userId)
+    if (!user?.id)
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     if (!id)
       return NextResponse.json({ message: "Invalid Data" }, { status: 400 });

@@ -1,22 +1,22 @@
-import { auth, useAuth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 import prismadb from "@/libs/prismadb";
+import getCurrentUser from "@/libs/getCurrentUser";
 
 export async function POST(req: Request) {
   try {
-    const { userId } = auth();
+    const user = await getCurrentUser();
     const body = await req.json();
     const { name } = body;
 
-    if (!userId)
+    if (!user?.id)
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
     if (!name)
       return NextResponse.json({ message: "Invalid Data" }, { status: 400 });
 
     const isExist = await prismadb.vault.findFirst({
-      where: { name, userId },
+      where: { name, userId: user.id },
     });
 
     if (isExist)
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
       );
 
     const newVault = await prismadb.vault.create({
-      data: { userId, name },
+      data: { userId: user.id, name },
     });
 
     if (!newVault)
@@ -48,12 +48,12 @@ export async function POST(req: Request) {
 
 export async function GET() {
   try {
-    const { userId } = auth();
-    if (!userId)
+    const user = await getCurrentUser();
+    if (!user?.id)
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
     const channels = await prismadb.vault.findMany({
-      where: { userId },
+      where: { userId: user.id },
       orderBy: { createdAt: "desc" },
     });
     return NextResponse.json(channels);

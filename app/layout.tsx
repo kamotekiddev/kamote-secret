@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { ClerkProvider } from "@clerk/nextjs";
 
 import ChakraProvider from "@/provider/ChakraProvider";
 import MainLayout from "@/components/layouts/MainLayout";
 import ModalProvider from "@/provider/ModalProvider";
 import ReactQueryProvider from "@/provider/ReactQueryProvider";
+import AuthProvider from "@/provider/AuthProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,17 +20,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={inter.className}>
+    <html lang="en">
+      <body className={inter.className}>
+        <AuthProvider>
           <ChakraProvider>
             <ReactQueryProvider>
               <ModalProvider />
               <MainLayout>{children}</MainLayout>
             </ReactQueryProvider>
           </ChakraProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+        </AuthProvider>
+      </body>
+    </html>
   );
 }

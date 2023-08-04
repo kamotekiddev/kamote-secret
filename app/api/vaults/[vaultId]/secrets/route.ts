@@ -1,7 +1,7 @@
 import CryptoJS from "crypto-js";
-import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import prismadb from "@/libs/prismadb";
+import getCurrentUser from "@/libs/getCurrentUser";
 
 interface Params {
   vaultId: string;
@@ -11,13 +11,13 @@ const SECRET_LIMIT = 20;
 
 export async function GET(req: Request, { params }: { params: Params }) {
   try {
-    const { userId } = auth();
+    const user = await getCurrentUser();
 
-    if (!userId)
+    if (!user?.id)
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
     const vault = await prismadb.vault.findUnique({
-      where: { userId, id: params.vaultId },
+      where: { userId: user.id, id: params.vaultId },
     });
 
     if (!vault)
@@ -39,11 +39,11 @@ export async function GET(req: Request, { params }: { params: Params }) {
 
 export async function POST(req: Request, { params }: { params: Params }) {
   try {
+    const user = await getCurrentUser();
     const body = await req.json();
-    const { userId } = auth();
     const { label, secret } = body;
 
-    if (!userId)
+    if (!user?.id)
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     if (!label || !secret)
       return NextResponse.json({ message: "Invalid Data" }, { status: 400 });
