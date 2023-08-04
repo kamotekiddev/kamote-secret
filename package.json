@@ -20,6 +20,7 @@
     "@types/react": "18.2.16",
     "@types/react-dom": "18.2.7",
     "axios": "^1.4.0",
+    "bcrypt": "^5.1.0",
     "crypto-js": "^4.1.1",
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.12",
@@ -37,6 +38,7 @@
     "zustand": "^4.3.9"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/crypto-js": "^4.1.1",
     "prisma": "^5.1.1"
   }
