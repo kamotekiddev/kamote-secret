@@ -17,11 +17,10 @@ const UserButton = () => {
 
   return (
     <Menu>
-      <MenuButton role="group">
+      <MenuButton w="full" role="group">
         <HStack
           p={2}
-          columnGap={5}
-          w="full"
+          spacing={5}
           rounded="lg"
           align="center"
           transition="all 300ms ease"

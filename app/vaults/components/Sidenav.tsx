@@ -55,7 +55,12 @@ const Sidenav = () => {
           />
         </Box>
       </Grid>
-      <Box p={4} borderTopWidth="1px" borderTopColor="gray.200">
+      <Box
+        p={4}
+        overflow="hidden"
+        borderTopWidth="1px"
+        borderTopColor="gray.200"
+      >
         <UserButton />
       </Box>
     </Grid>
