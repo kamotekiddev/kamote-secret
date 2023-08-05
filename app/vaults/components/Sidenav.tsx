@@ -2,51 +2,45 @@
 
 import { useParams } from "next/navigation";
 import { FiPlus } from "react-icons/fi";
-import {
-  Box,
-  Button,
-  Grid,
-  HStack,
-  Heading,
-  Stack,
-} from "@/components/chakra-components";
+import { Box, Button, Grid, Text } from "@/components/chakra-components";
 
 import useCreateVaultModal from "@/hooks/useCreateVaultModal";
 import useFetchVaults from "@/hooks/useFetchVaults";
 import VaultList from "./VaultList";
-import VaultSkeleton from "./VaultSkeleton";
 import UserButton from "@/components/UserButton";
 
 const Sidenav = () => {
-  const { vaultId } = useParams();
   const { onOpen } = useCreateVaultModal();
+  const { vaultId } = useParams();
   const { data: vaults, isLoading } = useFetchVaults();
 
   return (
     <Grid
-      w="250px"
+      w="270px"
       borderRight="1px"
       borderColor="gray.200"
-      templateRows="auto auto 1fr"
+      templateRows="auto 1fr auto"
       overflow="hidden"
+      rowGap={4}
     >
-      <HStack
-        p={4}
-        py={5}
-        h={70}
-        borderBottom="1px"
-        borderColor="gray.200"
-        align="center"
-        justify="space-between"
-      >
-        <Heading size="sm">Your Vaults</Heading>
-        <UserButton />
-      </HStack>
-      <Grid p={4} rowGap={4} overflow="hidden" templateRows="auto 1fr">
-        <Button onClick={onOpen} colorScheme="teal" rightIcon={<FiPlus />}>
+      <Box p={4}>
+        <Button
+          w="full"
+          onClick={onOpen}
+          variant="outline"
+          rightIcon={<FiPlus />}
+        >
           New Vault
         </Button>
+      </Box>
+      <Grid templateRows="auto 1fr">
+        <Box px={8}>
+          <Text fontSize="sm" fontWeight="bold" color="teal">
+            Your Vaults
+          </Text>
+        </Box>
         <Box
+          p={4}
           overflow="auto"
           css={{
             "&::-webkit-scrollbar": {
@@ -54,17 +48,16 @@ const Sidenav = () => {
             },
           }}
         >
-          {isLoading ? (
-            <Stack>
-              {[...Array(40).keys()].map((i) => (
-                <VaultSkeleton key={i} />
-              ))}
-            </Stack>
-          ) : (
-            <VaultList vaults={vaults} activeId={vaultId as string} />
-          )}
+          <VaultList
+            isLoading={isLoading}
+            vaults={vaults}
+            activeId={vaultId as string}
+          />
         </Box>
       </Grid>
+      <Box p={4} borderTopWidth="1px" borderTopColor="gray.200">
+        <UserButton />
+      </Box>
     </Grid>
   );
 };
