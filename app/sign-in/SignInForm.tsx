@@ -20,6 +20,7 @@ import {
   Text,
   Divider,
   FormHelperText,
+  useToast,
 } from "@/components/chakra-components";
 
 const formSchema = z.object({
@@ -33,6 +34,7 @@ const defaultValues: z.infer<typeof formSchema> = {
 };
 
 export default function SignInForm() {
+  const toast = useToast();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const handleGoogleLogin = () => signIn("google", { callbackUrl: "/vaults" });
@@ -46,22 +48,29 @@ export default function SignInForm() {
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      setLoading(true);
-      const response = await signIn("credentials", {
-        ...values,
-        redirect: false,
-        callbackUrl: "/vaults",
-      });
-      if (!response?.ok && response?.error) console.log(response);
-      router.replace("/vaults");
-
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    setLoading(true);
+    signIn("credentials", {
+      ...values,
+      redirect: false,
+    })
+      .then((callback) => {
+        if (callback?.error)
+          return toast({
+            title: "Error",
+            description: "Invalid Credentials",
+            status: "error",
+          });
+        return router.replace("/vaults");
+      })
+      .catch((err) =>
+        toast({
+          title: "Error",
+          description: "Internal Server Error",
+          status: "error",
+        })
+      )
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -84,12 +93,16 @@ export default function SignInForm() {
           <FormControl id="email">
             <FormLabel>Email address</FormLabel>
             <Input type="email" {...register("email")} />
-            <FormHelperText>{errors.email?.message}</FormHelperText>
+            <FormHelperText color="red.500">
+              {errors.email?.message}
+            </FormHelperText>
           </FormControl>
           <FormControl id="password">
             <FormLabel>Password</FormLabel>
             <Input type="password" {...register("password")} />
-            <FormHelperText>{errors.password?.message}</FormHelperText>
+            <FormHelperText color="red.500">
+              {errors.password?.message}
+            </FormHelperText>
           </FormControl>
           <Stack spacing={10}>
             <Stack

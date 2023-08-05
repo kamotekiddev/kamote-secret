@@ -20,22 +20,20 @@ export const authOptions: AuthOptions = {
         password: { label: "password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password)
-          throw new Error("Invalid Credentials");
+        if (!credentials?.email || !credentials?.password) return null;
 
         const user = await prismadb.user.findUnique({
           where: { email: credentials?.email },
         });
 
-        if (!user || !user?.hashedPassword)
-          throw new Error("Invalid Credentials");
+        if (!user || !user?.hashedPassword) return null;
 
         const correctPassword = await bcrypt.compare(
           credentials.password,
           user.hashedPassword
         );
 
-        if (!correctPassword) throw new Error("Invalid Credentials");
+        if (!correctPassword) return null;
         return user;
       },
     }),
