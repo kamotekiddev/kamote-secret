@@ -2,6 +2,8 @@
 
 import * as z from "zod";
 import Link from "next/link";
+import { isAxiosError } from "axios";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
@@ -12,9 +14,10 @@ import {
   Stack,
   Button,
   Heading,
-  Text,
   FormHelperText,
+  useToast,
 } from "@/components/chakra-components";
+import useRegister from "@/hooks/auth/useRegister";
 
 const formSchema = z.object({
   name: z.string().nonempty({ message: "This field is required" }),
@@ -29,6 +32,10 @@ const defaultValues: z.infer<typeof formSchema> = {
 };
 
 export default function SignUpForm() {
+  const toast = useToast();
+  const router = useRouter();
+  const { mutateAsync: registerAccount, isLoading } = useRegister();
+
   const {
     handleSubmit,
     register,
@@ -38,8 +45,20 @@ export default function SignUpForm() {
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const { data } = await registerAccount(values);
+      toast({ title: "Success", description: data.message, status: "success" });
+      router.replace("/sign-in");
+    } catch (error) {
+      if (isAxiosError<{ message: string }>(error))
+        toast({
+          title: "Error",
+          description:
+            error.response?.data.message || "Please try again later.",
+          status: "error",
+        });
+    }
   };
 
   return (
@@ -76,7 +95,7 @@ export default function SignUpForm() {
             <FormHelperText>{errors.password?.message}</FormHelperText>
           </FormControl>
           <Stack spacing={10} pt={2}>
-            <Button type="submit" loadingText="Submitting" colorScheme="blue">
+            <Button type="submit" isLoading={isLoading} colorScheme="blue">
               Sign up
             </Button>
           </Stack>

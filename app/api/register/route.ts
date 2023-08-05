@@ -1,19 +1,21 @@
 import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
-import getCurrentUser from "@/libs/getCurrentUser";
 import prismadb from "@/libs/prismadb";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const user = await getCurrentUser();
     const { email, name, password } = body;
-
-    if (!user?.id)
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
     if (!email || !name || !password)
       return NextResponse.json({ message: "Invalid Data" }, { status: 400 });
+
+    const existingUser = await prismadb.user.findFirst({ where: { email } });
+    if (existingUser)
+      return NextResponse.json(
+        { message: "Email already been taken" },
+        { status: 400 }
+      );
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
