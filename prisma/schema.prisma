@@ -19,6 +19,7 @@ model User {
   image          String?
   hashedPassword String?
   accounts       Account[]
+  secretKey      String?
 }
 
 model Account {
@@ -51,13 +52,14 @@ model Vault {
 }
 
 model Secret {
-  id        String   @id @default(uuid())
-  label     String
-  secret    String
-  vaultId   String
-  createdAt DateTime @default(now())
-  updated   DateTime @updatedAt
-  vaults    Vault    @relation(fields: [vaultId], references: [id])
+  id          String   @id @default(uuid())
+  label       String
+  secret      String
+  vaultId     String
+  isDecrypted Boolean? @default(true)
+  createdAt   DateTime @default(now())
+  updated     DateTime @updatedAt
+  vaults      Vault    @relation(fields: [vaultId], references: [id])
 
   @@index([vaultId])
 }
