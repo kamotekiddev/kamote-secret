@@ -18,6 +18,7 @@ import {
   useToast,
 } from "@/components/chakra-components";
 import useRegister from "@/hooks/auth/useRegister";
+import { signIn } from "next-auth/react";
 
 const formSchema = z.object({
   name: z.string().nonempty({ message: "This field is required" }),
@@ -49,7 +50,10 @@ export default function SignUpForm() {
     try {
       const { data } = await registerAccount(values);
       toast({ title: "Success", description: data.message, status: "success" });
-      router.replace("/sign-in");
+      signIn("credentials", { ...values, redirect: false }).then((response) => {
+        if (response?.error) return router.replace("/sign-in");
+        return router.replace("/vaults");
+      });
     } catch (error) {
       if (isAxiosError<{ message: string }>(error))
         toast({
