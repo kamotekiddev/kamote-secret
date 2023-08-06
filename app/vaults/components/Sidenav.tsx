@@ -36,7 +36,7 @@ const Sidenav = () => {
       <Grid templateRows="auto 1fr">
         <Box px={8}>
           <Text fontSize="sm" fontWeight="bold" color="teal">
-            Your Vaults
+            Your Vaults ({vaults?.length || 0})
           </Text>
         </Box>
         <Box
