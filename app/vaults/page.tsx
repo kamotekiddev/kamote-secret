@@ -1,7 +1,7 @@
-import { Box } from "@/components/chakra-components";
+import { Center } from "@/components/chakra-components";
 
 const Vaults = () => {
-  return <Box p={4}>Kamote Secret</Box>;
+  return <Center p={4}>Please open a vault</Center>;
 };
 
 export default Vaults;
