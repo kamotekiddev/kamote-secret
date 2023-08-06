@@ -1,10 +1,11 @@
+import { forwardRef } from "react";
 import {
   FormControl,
   FormHelperText,
   FormLabel,
   Input,
   InputProps,
-} from "@chakra-ui/react";
+} from "@/components/chakra-components";
 
 interface Props extends InputProps {
   isRequired?: boolean;
@@ -13,14 +14,16 @@ interface Props extends InputProps {
   description?: string;
 }
 
-const FormInput = ({ isRequired, label, error, ...props }: Props) => {
-  return (
-    <FormControl isRequired={isRequired}>
-      <FormLabel>{label}</FormLabel>
-      <Input {...props} />
-      {!!error && <FormHelperText color="red.500">{error}</FormHelperText>}
-    </FormControl>
-  );
-};
+const FormInput = forwardRef(
+  ({ isRequired, label, error, ...props }: Props, ref) => {
+    return (
+      <FormControl isRequired={isRequired}>
+        <FormLabel>{label}</FormLabel>
+        <Input {...props} ref={ref} />
+        {!!error && <FormHelperText color="red.500">{error}</FormHelperText>}
+      </FormControl>
+    );
+  }
+);
 
 export default FormInput;
