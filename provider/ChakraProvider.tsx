@@ -2,20 +2,12 @@
 
 import { ReactNode } from "react";
 import { CacheProvider } from "@chakra-ui/next-js";
-import { ChakraProvider as Provider, ThemeConfig } from "@chakra-ui/react";
-import { extendTheme } from "@chakra-ui/react";
-
-const config: ThemeConfig = {
-  initialColorMode: "dark",
-  useSystemColorMode: false,
-};
-
-const theme = extendTheme({ config });
+import { ChakraProvider as Provider } from "@chakra-ui/react";
 
 const ChakraProvider = ({ children }: { children: ReactNode }) => {
   return (
     <CacheProvider>
-      <Provider theme={theme}>{children}</Provider>
+      <Provider>{children}</Provider>
     </CacheProvider>
   );
 };
