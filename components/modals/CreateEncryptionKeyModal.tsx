@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,8 +15,14 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  useToast,
 } from "@/components/chakra-components";
 import FormTextArea from "../forms/FormTextArea";
+import useCreateEncryptionKeyModal from "@/hooks/useCreateEncryptionKeyModal";
+import { useQuery } from "react-query";
+import axios, { AxiosError, isAxiosError } from "axios";
+import { User } from "@prisma/client";
+import useCreateEncryptionKey from "@/hooks/useCreateEncryptionKey";
 
 const formSchema = z.object({ secretKey: z.string().min(8) });
 
@@ -23,7 +30,22 @@ const defaultValues: z.infer<typeof formSchema> = {
   secretKey: "",
 };
 
+interface SuccessResponse {
+  data: { currentUser: User };
+}
 const CreateEncryptionKeyModal = () => {
+  const toast = useToast();
+  const { isOpen, onClose, onOpen } = useCreateEncryptionKeyModal();
+  const { mutateAsync: createEncrytpionKey, isLoading } =
+    useCreateEncryptionKey();
+
+  const { data } = useQuery<SuccessResponse, AxiosError, User>({
+    queryFn: () => axios.get("/api/user"),
+    queryKey: ["current-user"],
+    select: (response) => response.data.currentUser,
+    onSuccess: ({ secretKey }) => !secretKey && onOpen(),
+  });
+
   const {
     handleSubmit,
     register,
@@ -35,11 +57,25 @@ const CreateEncryptionKeyModal = () => {
 
   const handleCreatePhrase = () => {};
 
-  const handleClose = () => {};
-  const onSubmit = () => {};
+  const handleClose = () => data?.id && data.secretKey && onClose();
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const { data } = await createEncrytpionKey(values.secretKey);
+      toast({ title: "Success", description: data.message, status: "success" });
+      onClose();
+    } catch (error) {
+      if (isAxiosError<{ message: string }>(error))
+        toast({
+          title: "Error",
+          description:
+            error.response?.data.message || "Please try again later.",
+          status: "error",
+        });
+    }
+  };
 
   return (
-    <Modal isOpen onClose={handleClose} isCentered>
+    <Modal isOpen={isOpen} onClose={handleClose} isCentered>
       <ModalOverlay />
       <ModalContent as="form" onSubmit={handleSubmit(onSubmit)}>
         <ModalHeader>
@@ -59,10 +95,13 @@ const CreateEncryptionKeyModal = () => {
         </ModalBody>
         <ModalFooter>
           <HStack>
-            <Button variant="outline">Close</Button>
+            <Button variant="outline" onClick={handleClose}>
+              Close
+            </Button>
             <Button
               type="submit"
               colorScheme="green"
+              isLoading={isLoading}
               onClick={handleCreatePhrase}
             >
               Create

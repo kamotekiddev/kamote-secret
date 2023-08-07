@@ -28,9 +28,10 @@ interface Props {
 const SecretBox = ({ secret, onDelete }: Props) => {
   const { onOpen } = useRevealSecretModal();
 
+  // TODO need to put the secret here
   const decryptedSecret = CryptoJS.AES.decrypt(
     secret?.secret || "",
-    "myEncryptionSecret"
+    ""
   )?.toString(CryptoJS.enc.Utf8);
 
   return (
@@ -78,7 +79,9 @@ const SecretBox = ({ secret, onDelete }: Props) => {
       </CardHeader>
       <CardBody>
         {secret?.isDecrypted ? (
-          <DecryptedSecrets decryptedSecret={JSON.parse(decryptedSecret)} />
+          <DecryptedSecrets
+            decryptedSecret={JSON.parse(decryptedSecret || "[]")}
+          />
         ) : (
           <Text>{secret.secret}</Text>
         )}
