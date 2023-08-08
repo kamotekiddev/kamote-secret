@@ -56,7 +56,7 @@ model Secret {
   label       String
   secret      String
   vaultId     String
-  isDecrypted Boolean? @default(true)
+  isDecrypted Boolean? @default(false)
   createdAt   DateTime @default(now())
   updated     DateTime @updatedAt
   vaults      Vault    @relation(fields: [vaultId], references: [id])
