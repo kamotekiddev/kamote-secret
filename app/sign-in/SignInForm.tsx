@@ -7,7 +7,7 @@ import { FaGoogle } from "react-icons/fa";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams, useSearchParams } from "next/navigation";
 import {
   Box,
   FormControl,
@@ -22,6 +22,7 @@ import {
   FormHelperText,
   useToast,
 } from "@/components/chakra-components";
+import SignInError from "@/components/SignInError";
 
 const formSchema = z.object({
   email: z.string().email().nonempty(),
@@ -36,8 +37,12 @@ const defaultValues: z.infer<typeof formSchema> = {
 export default function SignInForm() {
   const toast = useToast();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
+
   const handleGoogleLogin = () => signIn("google", { callbackUrl: "/vaults" });
+
+  console.log(searchParams.get("error"));
 
   const {
     handleSubmit,
@@ -104,6 +109,7 @@ export default function SignInForm() {
               {errors.password?.message}
             </FormHelperText>
           </FormControl>
+          <SignInError error={searchParams.get("error")!} />
           <Stack spacing={10}>
             <Stack
               direction={{ base: "column", sm: "row" }}
@@ -121,10 +127,12 @@ export default function SignInForm() {
               <Button leftIcon={<FaGoogle />} onClick={handleGoogleLogin}>
                 Continue with Google
               </Button>
+              Si
             </Stack>
             <Button as={Link} type="button" href="/sign-up" variant="link">
               Need an account?
             </Button>
+            S
           </Stack>
         </Stack>
       </Box>
