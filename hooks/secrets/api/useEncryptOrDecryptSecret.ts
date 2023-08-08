@@ -13,6 +13,7 @@ interface Params {
   vaultId: string;
   secretId: string;
   action: string;
+  secretKey: string;
 }
 
 const useEncryptOrDecryptSecret = () => {
@@ -20,9 +21,7 @@ const useEncryptOrDecryptSecret = () => {
 
   return useMutation<SuccessResponse, AxiosError, Params>(
     ({ vaultId, secretId, ...data }) =>
-      axios.put(`/api/vaults/${vaultId}/secrets/${secretId}`, {
-        action: data.action,
-      }),
+      axios.put(`/api/vaults/${vaultId}/secrets/${secretId}`, data),
     {
       onSuccess: () => queryClient.invalidateQueries({ queryKey: ["secrets"] }),
     }
