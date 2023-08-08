@@ -28,7 +28,17 @@ export async function GET(req: Request, { params }: { params: Params }) {
       orderBy: { createdAt: "desc" },
     });
 
-    return NextResponse.json(secrets);
+    const decryptedSecrets = secrets.map((currSecret) => {
+      if (!currSecret.isDecrypted || !user.secretKey) return currSecret;
+
+      const decryptedSecret = CryptoJS.AES.decrypt(
+        currSecret.secret,
+        user.secretKey!
+      ).toString(CryptoJS.enc.Utf8);
+      return { ...currSecret, secret: decryptedSecret };
+    });
+
+    return NextResponse.json(decryptedSecrets);
   } catch (error) {
     return NextResponse.json(
       { message: "Internal Server Error", error },
@@ -80,7 +90,11 @@ export async function POST(req: Request, { params }: { params: Params }) {
     ).toString();
 
     const newSecret = await prismadb.secret.create({
-      data: { label, secret: encryptedSecret, vaultId: params.vaultId },
+      data: {
+        label,
+        secret: encryptedSecret,
+        vaultId: params.vaultId,
+      },
     });
 
     return NextResponse.json({

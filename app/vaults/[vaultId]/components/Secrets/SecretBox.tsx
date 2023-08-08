@@ -1,4 +1,3 @@
-import CryptoJS from "crypto-js";
 import { Secret } from "@prisma/client";
 import { FiMoreHorizontal } from "react-icons/fi";
 import { FaLock, FaTrash, FaUnlock } from "react-icons/fa";
@@ -27,12 +26,6 @@ interface Props {
 
 const SecretBox = ({ secret, onDelete }: Props) => {
   const { onOpen } = useRevealSecretModal();
-
-  // TODO need to put the secret here
-  const decryptedSecret = CryptoJS.AES.decrypt(
-    secret?.secret || "",
-    ""
-  )?.toString(CryptoJS.enc.Utf8);
 
   return (
     <Card>
@@ -78,9 +71,9 @@ const SecretBox = ({ secret, onDelete }: Props) => {
         </HStack>
       </CardHeader>
       <CardBody>
-        {secret?.isDecrypted ? (
+        {secret.isDecrypted ? (
           <DecryptedSecrets
-            decryptedSecret={JSON.parse(decryptedSecret || "[]")}
+            decryptedSecret={JSON.parse(secret.secret || "[]")}
           />
         ) : (
           <Text>{secret.secret}</Text>

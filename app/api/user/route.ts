@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 import getCurrentUser from "@/libs/getCurrentUser";
 import prismadb from "@/libs/prismadb";
@@ -24,10 +25,11 @@ export async function PUT(req: Request) {
     if (!secretKey)
       return NextResponse.json({ message: "Invalid Data" }, { status: 400 });
 
-    // need to encrypt the secret here
+    const encryptedSecretKey = await bcrypt.hash(secretKey, 12);
+
     const user = await prismadb.user.update({
       where: { id: currentUser.id },
-      data: { secretKey },
+      data: { secretKey: encryptedSecretKey },
     });
 
     return NextResponse.json({ message: "Encryption Key Added.", user });
