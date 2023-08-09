@@ -13,9 +13,9 @@ const Secrets = () => {
   const { vaultId } = useParams();
   const { onOpen } = useDeleteSecretModal();
 
-  const { data: secrets, isLoading } = useFetchSecrets(vaultId as string);
+  const { data: secrets, isFetching } = useFetchSecrets(vaultId as string);
 
-  if (isLoading)
+  if (isFetching)
     return (
       <Stack rowGap={4}>
         {[...Array(10).keys()].map((i) => (
