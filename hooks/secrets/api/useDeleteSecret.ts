@@ -12,13 +12,16 @@ interface SuccessResponse {
 interface Params {
   vaultId: string;
   secretId: string;
+  secretKey: string;
 }
 
 const useDeleteSecret = () => {
   const queryClient = useQueryClient();
   return useMutation<SuccessResponse, AxiosError, Params>(
-    ({ vaultId, secretId }) =>
-      axios.delete(`/api/vaults/${vaultId}/secrets/${secretId}`),
+    ({ vaultId, secretId, secretKey }) =>
+      axios.delete(`/api/vaults/${vaultId}/secrets/${secretId}`, {
+        data: { secretKey },
+      }),
     {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["secrets"] });

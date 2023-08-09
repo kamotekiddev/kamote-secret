@@ -11,9 +11,20 @@ interface Params {
 export async function DELETE(req: Request, { params }: { params: Params }) {
   try {
     const user = await getCurrentUser();
+    const { secretKey } = await req.json();
 
     if (!user?.id)
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+
+    if (!secretKey)
+      return NextResponse.json({ message: "Invalid Data" }, { status: 400 });
+
+    const correctKey = await bcrypt.compare(secretKey, user.secretKey!);
+    if (!correctKey)
+      return NextResponse.json(
+        { message: "Invalid passphrase" },
+        { status: 400 }
+      );
 
     const deletedSecret = await prismadb.secret.delete({
       where: { id: params.secretId, vaultId: params.vaultId },
