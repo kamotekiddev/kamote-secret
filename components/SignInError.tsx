@@ -25,6 +25,8 @@ interface Props {
 }
 
 const SignInError = ({ error }: Props) => {
+  if (!error) return null;
+
   const errorMessage = error && (errors[error] ?? errors.default);
   return (
     <Alert status="error" rounded="lg">
