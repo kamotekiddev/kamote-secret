@@ -80,9 +80,9 @@ const CreateEncryptionKeyModal = () => {
       <ModalContent as="form" onSubmit={handleSubmit(onSubmit)}>
         <ModalHeader>
           <Heading size="md">Create Encryption Phrase</Heading>
-          <Text mt={4} fontSize="sm" color="gray.500" fontWeight="medium">
-            Note: what you put here will be asked the moment you decrypt any of
-            your secret
+          <Text mt={4} fontSize="sm" color="red.500" fontWeight="medium">
+            Note: what you put here cannot be remove or change and will be asked
+            the moment you decrypt any of
           </Text>
         </ModalHeader>
         <ModalBody>
