@@ -35,6 +35,7 @@ const DeleteSecretModal = () => {
     handleSubmit,
     register,
     formState: { errors },
+    reset,
   } = useForm({
     defaultValues,
     resolver: zodResolver(formSchema),
@@ -49,6 +50,7 @@ const DeleteSecretModal = () => {
         secretKey: values.secretKey,
       });
       toast({ title: "Success", description: data.message, status: "success" });
+      reset(defaultValues);
       handleClose();
     } catch (error) {
       if (isAxiosError<{ message: string }>(error))
