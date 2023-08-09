@@ -33,7 +33,12 @@ const UserButton = () => {
             name={session?.user?.name!}
           />
           <Box flex={1} overflow="hidden">
-            <Text fontSize="sm" fontWeight="medium" isTruncated>
+            <Text
+              textAlign="left"
+              fontSize="sm"
+              fontWeight="medium"
+              isTruncated
+            >
               {session?.user?.name}
             </Text>
           </Box>
