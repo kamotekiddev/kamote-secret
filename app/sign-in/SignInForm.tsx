@@ -42,8 +42,6 @@ export default function SignInForm() {
 
   const handleGoogleLogin = () => signIn("google", { callbackUrl: "/vaults" });
 
-  console.log(searchParams.get("error"));
-
   const {
     handleSubmit,
     register,
@@ -111,14 +109,6 @@ export default function SignInForm() {
           </FormControl>
           <SignInError error={searchParams.get("error")!} />
           <Stack spacing={10}>
-            <Stack
-              direction={{ base: "column", sm: "row" }}
-              align={"start"}
-              justify={"space-between"}
-            >
-              <Checkbox>Remember me</Checkbox>
-              <Text color={"blue.400"}>Forgot password?</Text>
-            </Stack>
             <Stack rowGap={4}>
               <Button isLoading={loading} colorScheme="blue" type="submit">
                 Sign in
