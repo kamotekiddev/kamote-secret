@@ -38,9 +38,14 @@ export default function SignInForm() {
   const toast = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [loading, setLoading] = useState(false);
+  const [isFormSubmitting, setIsFormSubmitting] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false)
 
-  const handleGoogleLogin = () => signIn("google", { callbackUrl: "/vaults" });
+  const handleGoogleLogin = () => {
+    setIsGoogleLoading(true)
+    signIn("google", {callbackUrl: "/vaults"}).finally(()=> setIsGoogleLoading(false));
+  }
+
 
   const {
     handleSubmit,
@@ -52,7 +57,7 @@ export default function SignInForm() {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    setLoading(true);
+    setIsFormSubmitting(true);
     signIn("credentials", {
       ...values,
       redirect: false,
@@ -73,7 +78,7 @@ export default function SignInForm() {
           status: "error",
         })
       )
-      .finally(() => setLoading(false));
+      .finally(() => setIsFormSubmitting(false));
   };
 
   return (
@@ -110,11 +115,11 @@ export default function SignInForm() {
           <SignInError error={searchParams.get("error")!} />
           <Stack spacing={10}>
             <Stack rowGap={4}>
-              <Button isLoading={loading} colorScheme="blue" type="submit">
+              <Button isLoading={isFormSubmitting} colorScheme="blue" type="submit">
                 Sign in
               </Button>
               <Divider />
-              <Button leftIcon={<FaGoogle />} onClick={handleGoogleLogin}>
+              <Button isLoading={isGoogleLoading} leftIcon={<FaGoogle />} onClick={handleGoogleLogin}>
                 Continue with Google
               </Button>
               Si
